@@ -8,6 +8,9 @@ export const NewTask = ({onAdd}) => {
     }
 
     function handleSubmit() {
+        if(enteredTask.trim() === '')
+            return;
+
         onAdd(enteredTask);
         setEnteredTask('');
     }
