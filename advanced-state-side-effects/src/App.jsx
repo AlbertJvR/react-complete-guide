@@ -7,18 +7,18 @@ import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
 import { sortPlacesByDistance } from './loc.js';
 
+// Put this outside the component function so that it's not executed everytime the component function rerenders.
+// This is a side effect that does NOT need useEffect.
 const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
-
-console.log(storedIds);
 const storedPlaces = storedIds.map((id) =>
     AVAILABLE_PLACES.find((place) => place.id === id)
 );
 
 function App() {
-  const modal = useRef();
   const selectedPlace = useRef();
   const [availablePlaces, setAvailablePlaces] = useState([]);
   const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Effect executes AFTER the component render cycle, and with empty dependencies param it will only execute once and never again,
   // so no infinite loop caused by setting the state causing a rerender, which in turn causes location to fire again, and then
@@ -36,12 +36,12 @@ function App() {
   }, [])
 
   function handleStartRemovePlace(id) {
-    modal.current.open();
+    setModalOpen(true);
     selectedPlace.current = id;
   }
 
   function handleStopRemovePlace() {
-    modal.current.close();
+    setModalOpen(false);
   }
 
   function handleSelectPlace(id) {
@@ -63,7 +63,7 @@ function App() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
-    modal.current.close();
+    setModalOpen(false);
 
     const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
     localStorage.setItem('selectedPlaces', JSON.stringify(storedIds.filter((id) => id !== selectedPlace.current)));
@@ -71,7 +71,7 @@ function App() {
 
   return (
     <>
-      <Modal ref={modal}>
+      <Modal open={modalOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
