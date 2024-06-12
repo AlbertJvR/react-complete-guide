@@ -13,9 +13,11 @@ export default function Modal({open, children, onClose}) {
         }
     }, [open]);
 
+    // The timer for the delete thing is set when then app is rendered for the first time. To get around this, conditionally
+    // render the component children so that only when the modal is open is the thing created with a timer.
     return createPortal(
         <dialog className="modal" ref={ dialog } onClose={onClose}>
-            { children }
+            { open ? children : null }
         </dialog>,
         document.getElementById('modal')
     );
