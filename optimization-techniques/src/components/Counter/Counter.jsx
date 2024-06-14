@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 
 import IconButton from '../UI/IconButton.jsx';
 import MinusIcon from '../UI/Icons/MinusIcon.jsx';
@@ -27,19 +27,30 @@ function isPrime(number) {
   return true;
 }
 
-export default function Counter({ initialCount }) {
+// By structuring components smartly, you dont need memo. By moving the stuff to ConfigureCounter you dont need this anymore
+const Counter =  memo(function Counter({ initialCount }) {
   log('<Counter /> rendered', 1);
-  const initialCountIsPrime = isPrime(initialCount);
+
+  /*
+  * useMemo is used for functions, whereas memo is used for components.
+  * useMemo should be used for functions that perform intensive calculations to ensure they only execute when they need to,
+  * and not everytime a component is recreated. In this case, only if the initialCount is changed, should prime be calculated.
+  * Use it sparingly as it can cost extra performance.
+  */
+  const initialCountIsPrime = useMemo(() => isPrime(initialCount), [initialCount]);
 
   const [counter, setCounter] = useState(initialCount);
 
-  function handleDecrement() {
+  // Functions are recreated which makes memo useless. Use useCallback hook to store internally and not recreate, then memo
+  // in the IconButton component will do its job as these then remain constant as its the only props that "change" between
+  // executions
+  const handleDecrement = useCallback(function () {
     setCounter((prevCounter) => prevCounter - 1);
-  }
+  }, []);
 
-  function handleIncrement() {
+  const handleIncrement = useCallback(function () {
     setCounter((prevCounter) => prevCounter + 1);
-  }
+  }, []);
 
   return (
     <section className="counter">
@@ -58,4 +69,6 @@ export default function Counter({ initialCount }) {
       </p>
     </section>
   );
-}
+});
+
+export default Counter;
