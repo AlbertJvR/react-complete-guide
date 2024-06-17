@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CustomInput } from './CustomInput.jsx';
+import { hasMinLength, isEmail, isNotEmpty } from '../util/validation.js';
 
 export default function StateLogin() {
     // const [enteredEmail, setEnteredEmail] = useState('');
@@ -15,8 +16,10 @@ export default function StateLogin() {
     });
 
     // With the stateful approach, you typically validate on every keystroke
-    const emailIsInvalid = didEdit.email && !formValues.email.includes('@');
-    const passwordIsInvalid = didEdit.password && formValues.password.trim().length < 6;
+    const emailIsInvalid = didEdit.email &&
+        !isEmail(formValues.email) &&
+        !isNotEmpty(formValues.email);
+    const passwordIsInvalid = didEdit.password && !hasMinLength(formValues.password, 6);
 
     function handleSubmit(event) {
         // The default behaviour of the form is to generate a http request and send it on submit. To prevent this, use the
