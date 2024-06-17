@@ -6,6 +6,8 @@ export default function RefLogin() {
     const email = useRef();
     const password = useRef();
 
+    const [emailIsInvalid, setEmailIsInvalid] = useState(false);
+
     function handleSubmit(event) {
         // The default behaviour of the form is to generate an http request and send it on submit. To prevent this, use the
         // method below so that we can handle it our own way and prevent this default behaviour.
@@ -13,6 +15,15 @@ export default function RefLogin() {
 
         const enteredEmail = email.current.value;
         const enteredPassword = password.current.value;
+
+        const emailIsValid = enteredEmail.includes('@');
+
+        if (!emailIsValid) {
+            setEmailIsInvalid(true);
+            return;
+        }
+
+        setEmailIsInvalid(false);
     }
 
     return (
@@ -23,17 +34,20 @@ export default function RefLogin() {
                 <div className="control no-margin">
                     <label htmlFor="email">Email</label>
                     <input
-                        ref={email}
+                        ref={ email }
                         id="email"
                         type="email"
                         name="email"
                     />
+                    <div className="control-error">
+                        { emailIsInvalid && <p>Please enter a valid email address.</p> }
+                    </div>
                 </div>
 
                 <div className="control no-margin">
                     <label htmlFor="password">Password</label>
                     <input
-                        ref={password}
+                        ref={ password }
                         id="password"
                         type="password"
                         name="password"

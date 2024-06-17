@@ -8,8 +8,16 @@ export default function StateLogin() {
         password: ''
     });
 
+    const [didEdit, setDidEdit] = useState({
+        email: false,
+        password: false
+    });
+
+    // With the stateful approach, you typically validate on every keystroke
+    const emailIsInvalid = didEdit.email && !formValues.email.includes('@');
+
     function handleSubmit(event) {
-        // The default behaviour of the form is to generate an http request and send it on submit. To prevent this, use the
+        // The default behaviour of the form is to generate a http request and send it on submit. To prevent this, use the
         // method below so that we can handle it our own way and prevent this default behaviour.
         event.preventDefault();
 
@@ -29,6 +37,20 @@ export default function StateLogin() {
             ...prevState,
             [identifier]: value
         }));
+
+        // Update this on every keystroke as you want the message to disappear once the user focuses the element again and
+        // starts typing
+        setDidEdit((prevState) => ({
+            ...prevState,
+            [identifier]: false
+        }));
+    }
+
+    function handleInputBlur(identifier) {
+        setDidEdit(prevState => ({
+            ...prevState,
+            [identifier]: true
+        }));
     }
 
     return (
@@ -43,8 +65,12 @@ export default function StateLogin() {
                         type="email"
                         name="email"
                         value={formValues.email}
+                        onBlur={() => handleInputBlur('email')}
                         onChange={ (event) => handleInputChange(event.target.value, 'email') }
                     />
+                    <div className="control-error">
+                        { emailIsInvalid && <p>Please enter a valid email address.</p> }
+                    </div>
                 </div>
 
                 <div className="control no-margin">
@@ -60,7 +86,7 @@ export default function StateLogin() {
             </div>
 
             <p className="form-actions">
-                <button className="button button-flat">Reset</button>
+                <button type="reset" className="button button-flat">Reset</button>
                 <button className="button">Login</button>
             </p>
         </form>
