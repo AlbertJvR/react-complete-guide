@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { CustomInput } from './CustomInput.jsx';
 
 export default function StateLogin() {
     // const [enteredEmail, setEnteredEmail] = useState('');
@@ -15,6 +16,7 @@ export default function StateLogin() {
 
     // With the stateful approach, you typically validate on every keystroke
     const emailIsInvalid = didEdit.email && !formValues.email.includes('@');
+    const passwordIsInvalid = didEdit.password && formValues.password.trim().length < 6;
 
     function handleSubmit(event) {
         // The default behaviour of the form is to generate a http request and send it on submit. To prevent this, use the
@@ -58,31 +60,27 @@ export default function StateLogin() {
             <h2>Login</h2>
 
             <div className="control-row">
-                <div className="control no-margin">
-                    <label htmlFor="email">Email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={formValues.email}
-                        onBlur={() => handleInputBlur('email')}
-                        onChange={ (event) => handleInputChange(event.target.value, 'email') }
-                    />
-                    <div className="control-error">
-                        { emailIsInvalid && <p>Please enter a valid email address.</p> }
-                    </div>
-                </div>
+                <CustomInput
+                    label="Email"
+                    id="email"
+                    type="email"
+                    name="email"
+                    value={ formValues.email }
+                    onBlur={ () => handleInputBlur('email') }
+                    onChange={ (event) => handleInputChange(event.target.value, 'email') }
+                    error={ emailIsInvalid && 'Please enter a valid email address.'}
+                />
 
-                <div className="control no-margin">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={formValues.password}
-                        onChange={ (event) => handleInputChange(event.target.value, 'password') }
-                    />
-                </div>
+                <CustomInput
+                    label="Password"
+                    id="password"
+                    type="password"
+                    name="password"
+                    value={ formValues.password }
+                    onBlur={ () => handleInputBlur('password') }
+                    onChange={ (event) => handleInputChange(event.target.value, 'password') }
+                    error={ passwordIsInvalid && 'Please enter a valid password.'}
+                />
             </div>
 
             <p className="form-actions">
