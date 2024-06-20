@@ -1,6 +1,6 @@
 import classes from './Counter.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { counterActions } from '../store';
+import { counterActions } from '../store/counter';
 
 /*const Counter = () => {
     const toggleCounterHandler = () => {
@@ -45,8 +45,8 @@ const Counter = () => {
     };
 
     // Automatically sets up the subscription to the store and component will be re-rendered if the state value changes
-    const counter = useSelector((state) => state.counter);
-    const show = useSelector((state) => state.showCounter);
+    const counter = useSelector((state) => state.counter.counter);
+    const show = useSelector((state) => state.counter.showCounter);
 
     const dispatch = useDispatch();
 
