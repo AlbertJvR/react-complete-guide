@@ -65,6 +65,10 @@ export const loadEvents = async () => {
 
 export const loader = async () => {
     return defer({
+        // If you add the await keyword like below, defer() will only navigate to the page once the awaited data is ready
+        // so if you have multiple things being loaded on the page and being deferred, you can pause navigating there until
+        // maybe the first piece or whatever piece of data is ready.
+        // events: loadEvents()
         events: loadEvents()
     });
 };
