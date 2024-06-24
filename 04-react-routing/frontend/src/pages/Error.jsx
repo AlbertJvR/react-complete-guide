@@ -11,7 +11,9 @@ export const Error = () => {
     let message = 'Something went wrong';
 
     if (error.status === 500) {
-        message = JSON.parse(error.data).message;
+        // When using the json method as shown in the Events.jsx file, you can simplify the below to approach further down
+        // message = JSON.parse(error.data).message;
+        message = error.data.message;
     }
 
     if (error.status === 404) {

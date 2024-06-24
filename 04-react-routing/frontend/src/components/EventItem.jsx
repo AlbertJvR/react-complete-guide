@@ -1,8 +1,17 @@
 import classes from './EventItem.module.css';
+import { Link, useSubmit } from 'react-router-dom';
 
 function EventItem({ event }) {
+    // This hook programmatically submits an action just like the Form element does in EventForm.jsx. This triggers the
+    // router action, and then you can send data and extract stuff like the method type in the action using the request param.
+    const submit = useSubmit();
+
     function startDeleteHandler() {
-        // ...
+        const proceed = window.confirm('Are you sure you want to delete this event?');
+
+        if (proceed) {
+            submit(null, { method: 'delete' });
+        }
     }
 
     return (
@@ -12,7 +21,7 @@ function EventItem({ event }) {
             <time>{ event.date }</time>
             <p>{ event.description }</p>
             <menu className={ classes.actions }>
-                <a href="edit">Edit</a>
+                <Link to="edit">Edit</Link>
                 <button onClick={ startDeleteHandler }>Delete</button>
             </menu>
         </article>

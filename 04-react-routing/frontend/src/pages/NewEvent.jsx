@@ -1,5 +1,8 @@
+import EventForm from '../components/EventForm';
+
 export const NewEvent = () => {
     return (
-        <h1>New Event</h1>
+        <EventForm method="post"/>
     )
 }
+
