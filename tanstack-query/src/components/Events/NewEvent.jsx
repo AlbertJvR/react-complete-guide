@@ -2,24 +2,49 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import Modal from '../UI/Modal.jsx';
 import EventForm from './EventForm.jsx';
+import { useMutation } from '@tanstack/react-query';
+import { createNewEvent, queryClient } from '../../util/http.js';
+import ErrorBlock from '../UI/ErrorBlock.jsx';
 
 export default function NewEvent() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  function handleSubmit(formData) {}
+    const { mutate, isPending, isError, error } = useMutation({
+        mutationFn: createNewEvent,
+        onSuccess: () => {
+            // By setting the 'exact' property, you invalidate an exact match on the query key, you should in this case not
+            // set is as you want any queries that have event data to be invalidated, such as the search etc
+            // queryClient.invalidateQueries({ queryKey: ['events'], exact: true });
+            queryClient.invalidateQueries({ queryKey: ['events'] });
+            navigate('/events');
+        }
+    });
 
-  return (
-    <Modal onClose={() => navigate('../')}>
-      <EventForm onSubmit={handleSubmit}>
-        <>
-          <Link to="../" className="button-text">
-            Cancel
-          </Link>
-          <button type="submit" className="button">
-            Create
-          </button>
-        </>
-      </EventForm>
-    </Modal>
-  );
+    function handleSubmit(formData) {
+        mutate({
+            event: formData
+        });
+    }
+
+    return (
+        <Modal onClose={ () => navigate('../') }>
+            <EventForm onSubmit={ handleSubmit }>
+                { isPending && 'Submitting...' }
+                { !isPending && (
+                    <>
+                        <Link to="../" className="button-text">
+                            Cancel
+                        </Link>
+                        <button type="submit" className="button">
+                            Create
+                        </button>
+                    </>
+                ) }
+            </EventForm>
+            { isError && <ErrorBlock
+                title="Failed to create event."
+                message={ error.info?.message || 'Failed to create event. Please check your inputs and try again.' }
+            /> }
+        </Modal>
+    );
 }

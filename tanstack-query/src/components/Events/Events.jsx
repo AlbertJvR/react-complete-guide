@@ -6,19 +6,19 @@ import FindEventSection from './FindEventSection.jsx';
 import NewEventsSection from './NewEventsSection.jsx';
 
 export default function Events() {
-  return (
-    <>
-      <Outlet />
-      <Header>
-        <Link to="/events/new" className="button">
-          New Event
-        </Link>
-      </Header>
-      <main>
-        <EventsIntroSection />
-        <NewEventsSection />
-        <FindEventSection />
-      </main>
-    </>
-  );
+    return (
+        <>
+            <Outlet/>
+            <Header>
+                <Link to="/events/new" className="button">
+                    New Event
+                </Link>
+            </Header>
+            <main>
+                <EventsIntroSection/>
+                <NewEventsSection/>
+                <FindEventSection/>
+            </main>
+        </>
+    );
 }

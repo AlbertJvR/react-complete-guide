@@ -4,11 +4,12 @@ import {
     createBrowserRouter,
 } from 'react-router-dom';
 
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './util/http.js';
 import Events from './components/Events/Events.jsx';
 import EventDetails from './components/Events/EventDetails.jsx';
 import NewEvent from './components/Events/NewEvent.jsx';
 import EditEvent from './components/Events/EditEvent.jsx';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const router = createBrowserRouter([
     {
@@ -38,7 +39,6 @@ const router = createBrowserRouter([
     },
 ]);
 
-const queryClient = new QueryClient();
 
 // For Tanstack to work, you need to wrap the component and the components that want to use its features with the
 // QueryClientProvider.
