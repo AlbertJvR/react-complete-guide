@@ -12,8 +12,8 @@ export default function NewEventsSection() {
     * gcTime: set how long values hang around in the cache in milliseconds. Default is 5 min then its discarded
     */
     const { data, isPending, isError, error } = useQuery({
-        queryKey: ['events'],
-        queryFn: fetchEvents,
+        queryKey: ['events', { max: 3 }],
+        queryFn: ({ signal, queryKey }) => fetchEvents({ signal, ...queryKey[1] }),
         // staleTime: 5000,
         //gcTime: 1000
     });

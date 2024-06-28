@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, redirect, useNavigate, useParams } from 'react-router-dom';
 
 import Modal from '../UI/Modal.jsx';
 import EventForm from './EventForm.jsx';
@@ -11,7 +11,7 @@ export default function EditEvent() {
     const navigate = useNavigate();
     const params = useParams();
     const { data, isPending, isError, error } = useQuery({
-        queryKey: ['events-detail'],
+        queryKey: ['events', params.id],
         queryFn: ({ signal }) => fetchEvent({ signal, id: params.id }),
     });
 
@@ -94,3 +94,22 @@ export default function EditEvent() {
         </Modal>
     );
 }
+
+// You can use the loader with Tanstack, I prefer the tanstack approach
+/*export function loader({ params }) {
+    return queryClient.fetchQuery({
+        queryKey: ['events', params.id],
+        queryFn: ({ signal }) => fetchEvent({ signal, id: params.id }),
+    });
+}*/
+
+// This is an alternative to the mutate by using react router
+// export async function action({ request, params }) {
+//     const formData = await request.formData();
+//     const updatedEventData = Object.fromEntries(formData);
+//
+//     await updateEvent({ id: params.id, event: updatedEventData });
+//     await queryClient.invalidateQueries(['events']);
+//
+//     return redirect('../');
+// }

@@ -6,7 +6,7 @@ import { fetchSelectableImages } from '../../util/http.js';
 import ErrorBlock from '../UI/ErrorBlock.jsx';
 
 export default function EventForm({ inputData, onSubmit, children }) {
-    const { data, isPending, isError, error } = useQuery({
+    const { data, isPending, isError } = useQuery({
         queryFn: fetchSelectableImages,
         queryKey: ['events-images']
     });

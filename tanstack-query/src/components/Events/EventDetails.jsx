@@ -12,10 +12,10 @@ export default function EventDetails() {
     const eventId = params.id;
 
     const { data, isPending, isError, error } = useQuery({
-        queryKey: ['events-detail'],
-        queryFn: ({ signal }) => fetchEvent({ id: eventId, signal }),
-        staleTime: 0,
-        gcTime: 0
+        queryKey: ['events', eventId],
+        queryFn: ({ signal }) => fetchEvent({ id: eventId, signal })
+        // staleTime: 0,
+        // gcTime: 0
     });
 
     // refetchType: none is important here, as when you delete something, react query tries to refetch existing queries, and
